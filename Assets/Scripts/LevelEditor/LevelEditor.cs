@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LevelEditor : MonoBehaviour
+public class LevelEditor : Singleton<LevelEditor>
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

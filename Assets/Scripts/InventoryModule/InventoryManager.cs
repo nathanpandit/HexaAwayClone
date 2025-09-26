@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : Singleton<InventoryManager>
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
