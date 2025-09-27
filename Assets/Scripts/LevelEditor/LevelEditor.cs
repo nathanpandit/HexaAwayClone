@@ -1,16 +1,28 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelEditor : Singleton<LevelEditor>
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] public int mapRadius = 1;
+    [SerializeField] private HexagonTile hexagonTilePrefab;
+    List<HexagonTile> hexagonTiles = new();
+
+    private void Start()
+    {
+        GenerateHexagonRings();
+    }
+
+    private void GenerateHexagonRings()
+    {
+        for (int i = 1; i <= mapRadius; i++)
+        {
+            GenerateHexagonRing(i);
+        }
+    }
+
+    private void GenerateHexagonRing(int i)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
