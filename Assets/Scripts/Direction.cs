@@ -5,5 +5,6 @@ public enum Direction
     DR,
     D,
     DL,
-    UL
+    UL,
+    None
 }

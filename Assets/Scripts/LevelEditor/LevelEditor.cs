@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
-using Vector2 = System.Numerics.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public class LevelEditor : Singleton<LevelEditor>
@@ -16,17 +12,19 @@ public class LevelEditor : Singleton<LevelEditor>
     [SerializeField] private HexagonTile hexagonTilePrefab;
     [SerializeField] public float hexagonSize = 1;
     [SerializeField] public int level = 1;
+    [SerializeField] public PaintMode paintMode;
     public LevelData levelData;
-    Dictionary<Vector2Int, HexagonTile> hexagonTiles = new Dictionary<Vector2Int, HexagonTile>();
-    
-    private static readonly Vector2Int[] directions = new Vector2Int[]
+    Dictionary<Vector2Int, HexagonTile> hexagonTiles = new();
+
+    private Dictionary<HexColor, Color> colorDict = new()
     {
-        new Vector2Int( 1,  0),  // east
-        new Vector2Int( 1, -1),  // southeast
-        new Vector2Int( 0, -1),  // southwest
-        new Vector2Int(-1,  0),  // west
-        new Vector2Int(-1,  1),  // northwest
-        new Vector2Int( 0,  1)   // northeast
+        {HexColor.Cyan, Color.cyan},
+        {HexColor.Blue, Color.blue},
+        {HexColor.Purple, Color.magenta},
+        {HexColor.Red, Color.red},
+        {HexColor.Pink, new Color(255,105,180)},
+        {HexColor.Yellow, Color.yellow},
+        {HexColor.Green, Color.green}
     };
 
     private void Awake()
@@ -49,7 +47,7 @@ public class LevelEditor : Singleton<LevelEditor>
                 for (int j = -mapSizeY; j <= mapSizeY; j++)
                 {
                     CreateHexagonTileAt(i, j);
-                    HexagonTileData newData = new HexagonTileData(i,j);
+                    HexagonTileData newData = new HexagonTileData(i,j, false, Direction.None);
                     levelData.tileData.Add(newData);
                 }
 
@@ -57,7 +55,6 @@ public class LevelEditor : Singleton<LevelEditor>
         }
         else
         {
-            // FIX THIS PART
             List<HexagonTileData> tempData = new();
             tempData = levelData.tileData;
             foreach (HexagonTileData htd in tempData)
@@ -146,4 +143,21 @@ public class LevelEditor : Singleton<LevelEditor>
         levelData = new LevelData(new List<HexagonTileData>());
     }
 
+}
+
+public enum PaintMode
+{
+    Tile,
+    Hex
+}
+
+public enum HexColor
+{
+    Cyan,
+    Blue,
+    Purple,
+    Red,
+    Pink,
+    Yellow,
+    Green
 }
