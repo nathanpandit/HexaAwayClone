@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR;
 
 public class InputManager : Singleton<InputManager>
 {
@@ -82,6 +83,16 @@ public class InputManager : Singleton<InputManager>
                 r = Mathf.RoundToInt(worldPos.y + 0.5f);
             }
             LevelEditor.Instance().RemoveHexagonTileAt(q, r);
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            LevelEditor.Instance().SaveLevel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LevelEditor.Instance().LoadLevel();
         }
         
     }
