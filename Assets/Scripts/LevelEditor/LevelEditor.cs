@@ -36,23 +36,21 @@ public class LevelEditor : Singleton<LevelEditor>
 
     private void Start()
     {
-        // ResetLevel();
-        GenerateMap();
-        foreach (HexagonTileData htd in levelData.tileData)
-        {
-            Debug.Log($"{htd.q}, {htd.r}");
-        }
+        LoadLevel();
     }
 
     public void GenerateMap()
     {
         if (levelData == null || levelData.tileData.Count == 0)
         {
+            levelData = new LevelData(new List<HexagonTileData>());
             for (int i = -mapSizeX; i <= mapSizeX; i++)
             {
                 for (int j = -mapSizeY; j <= mapSizeY; j++)
                 {
                     CreateHexagonTileAt(i, j);
+                    HexagonTileData newData = new HexagonTileData(i,j);
+                    levelData.tileData.Add(newData);
                 }
 
             }
@@ -89,8 +87,6 @@ public class LevelEditor : Singleton<LevelEditor>
         newTile.axialCoordinate = new Vector2Int(q, r);
         newTile.transform.parent = LevelParent.Instance().transform;
         hexagonTiles[key] = newTile;
-        HexagonTileData newData = new HexagonTileData(q,r);
-        levelData.tileData.Add(newData);
     }
 
     public void RemoveHexagonTileAt(int q, int r)
@@ -98,11 +94,11 @@ public class LevelEditor : Singleton<LevelEditor>
         Debug.Log($"{q}, {r}");
         HexagonTileData dataToRemove = levelData.tileData.FirstOrDefault(x => x.q == q && x.r == r);
         Vector2Int key = new Vector2Int(q, r);
-        if (dataToRemove != null && hexagonTiles.ContainsKey(key))
+        if (hexagonTiles.ContainsKey(key))
         {
             Destroy(hexagonTiles[key].gameObject);
             hexagonTiles.Remove(key);
-            levelData.tileData.Remove(dataToRemove);
+            if(dataToRemove != null) levelData.tileData.Remove(dataToRemove);
         }
     }
 
@@ -136,6 +132,8 @@ public class LevelEditor : Singleton<LevelEditor>
             GenerateMap();
             levelData = tempData;
         }
+        
+        Debug.Log($"Level {level} loaded!");
     }
 
     public void ResetLevel()

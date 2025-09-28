@@ -94,6 +94,20 @@ public class InputManager : Singleton<InputManager>
         {
             LevelEditor.Instance().LoadLevel();
         }
-        
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            LevelEditor.Instance().level++;
+            LevelEditor.Instance().LoadLevel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (LevelEditor.Instance().level > 1)
+            {
+                LevelEditor.Instance().level--;
+                LevelEditor.Instance().LoadLevel();
+            }
+        }
     }
 }
