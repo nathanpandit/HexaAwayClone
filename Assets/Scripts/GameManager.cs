@@ -1,6 +1,26 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class GameManager
 {
+    public static int level = 1;
+    public static Dictionary<Vector2Int, Tile> tileDict = new();
+    public static List<Hex> hexes = new();
 
+    public static Dictionary<HexColor, Color> colorDict = new()
+    {
+        {HexColor.Cyan, Color.cyan},
+        {HexColor.Blue, Color.blue},
+        {HexColor.Purple, Color.magenta},
+        {HexColor.Red, Color.red},
+        {HexColor.Orange, new Color(1f, 0.5f, 0f)},
+        {HexColor.Yellow, Color.yellow},
+        {HexColor.Green, Color.green}
+    };
+
+
+    public static void StartLevel()
+    {
+        LevelGenerator.Instance().GenerateLevel(level);
+    }
 }
