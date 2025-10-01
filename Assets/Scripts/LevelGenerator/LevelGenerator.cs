@@ -37,6 +37,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
         newTile.r = hdt.r;
         Vector2Int key = new Vector2Int(hdt.q, hdt.r);
         GameManager.tileDict[key] = newTile;
+        newTile.transform.parent = TileParent.Instance().transform;
         return newTile;
     }
 
@@ -45,6 +46,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
         Hex newHex = Instantiate(hexPrefab, AxialToWorld(hdt.q, hdt.r), Quaternion.identity);
         newHex.Initialize(tile, hdt.q, hdt.r, hdt.color, hdt.direction);
         GameManager.hexes.Add(newHex);
+        newHex.transform.parent = HexParent.Instance().transform;
     }
 
     Vector2 AxialToWorld(int q, int r)

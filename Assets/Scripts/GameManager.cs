@@ -4,6 +4,7 @@ using UnityEngine;
 public static class GameManager
 {
     public static int level = 1;
+    public static float unitDuration = 0.1f;
     public static Dictionary<Vector2Int, Tile> tileDict = new();
     public static List<Hex> hexes = new();
 

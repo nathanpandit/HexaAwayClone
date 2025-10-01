@@ -9,6 +9,7 @@ public class Hex : MonoBehaviour
     public HexColor color;
     public Direction direction;
     public SpriteRenderer hexRenderer, arrowRenderer;
+    public bool isAnimating;
 
     public void Awake()
     {
@@ -66,21 +67,36 @@ public class Hex : MonoBehaviour
 
     public void PerformMovement()
     {
-        Debug.Log($"I AM MOVING {restTile.q} {restTile.r}");
-        Vector2 posToGo = GetNextPosition(direction);
-        Tile tileToGo = ThereIsTile(posToGo);
-        if (tileToGo != null)
-        {
-            if(!tileToGo.HasHex()) transform.DOMove(posToGo, 0.25f).SetEase(Ease.Linear).OnComplete(PerformMovement);
-            else
-            {
-                ReturnToRestPos();
-            }
-        }
-        else
-        {
-            transform.DOMove(posToGo, 0.25f).SetEase(Ease.Linear).OnComplete(HexFinish);
-        }
+		if (isAnimating) return;
+		Debug.Log($"I AM MOVING {restTile.q} {restTile.r}");
+		var result = PathTest();
+		float duration = result.forwardSteps * GameManager.unitDuration;
+		if (result.forwardSteps > 0)
+		{
+			isAnimating = true;
+			transform.DOMove(result.targetPos, duration).SetEase(Ease.Linear).OnComplete(() =>
+			{
+				if (result.allClear)
+				{
+					HexFinish();
+				}
+				else
+				{
+					ReturnToRestPos(duration);
+				}
+			});
+		}
+		else
+		{
+			float shakeDuration = 0.2f;
+			float shakeStrength = 0.1f;
+			int vibrato = 10;
+			isAnimating = true;
+			transform.DOShakePosition(shakeDuration, shakeStrength, vibrato, 90f, false, true).OnComplete(() =>
+			{
+				isAnimating = false;
+			});
+		}
     }
 
     void HexFinish()
@@ -89,10 +105,14 @@ public class Hex : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void ReturnToRestPos()
-    {
-        transform.DOMove(restTile.transform.position, 0.5f).SetEase(Ease.Linear);
-    }
+	void ReturnToRestPos(float duration)
+	{
+		isAnimating = true;
+		transform.DOMove(restTile.transform.position, duration).SetEase(Ease.Linear).OnComplete(() =>
+		{
+			isAnimating = false;
+		});
+	}
 
     public Vector2 GetNextPosition(Direction dir)
     {
@@ -109,6 +129,54 @@ public class Hex : MonoBehaviour
             default: return Vector2.zero;
         }
     }
+
+	private Vector2 GetNextPositionFrom(Vector2 fromPos, Direction dir)
+	{
+		float xoffset = Mathf.Sqrt(3) / 2;
+		float yoffset = 0.5f;
+		switch (dir)
+		{
+			case Direction.D: return new Vector2(fromPos.x, fromPos.y - 2*yoffset);
+			case Direction.DR: return new Vector2(fromPos.x + xoffset, fromPos.y - yoffset);
+			case Direction.UR: return new Vector2(fromPos.x + xoffset, fromPos.y + yoffset);
+			case Direction.U: return new Vector2(fromPos.x, fromPos.y + 2*yoffset);
+			case Direction.UL: return new Vector2(fromPos.x - xoffset, fromPos.y + yoffset);
+			case Direction.DL: return new Vector2(fromPos.x - xoffset, fromPos.y - yoffset);
+			default: return Vector2.zero;
+		}
+	}
+
+	private struct PathTestResult
+	{
+		public bool allClear;
+		public int forwardSteps;
+		public Vector2 targetPos;
+	}
+
+	private PathTestResult PathTest()
+	{
+		Vector2 currentPos = transform.position;
+		int steps = 0;
+		while (true)
+		{
+			Vector2 nextPos = GetNextPositionFrom(currentPos, direction);
+			Tile nextTile = ThereIsTile(nextPos);
+			if (nextTile == null)
+			{
+				// Reached edge; path is clear to the edge, and we move one extra step off-map
+				Vector2 offMapPos = nextPos;
+				return new PathTestResult { allClear = true, forwardSteps = steps + 1, targetPos = offMapPos };
+			}
+			if (nextTile.HasHex())
+			{
+				// Blocked; stop before the blocker
+				return new PathTestResult { allClear = false, forwardSteps = steps, targetPos = currentPos };
+			}
+			// Empty tile, advance
+			steps++;
+			currentPos = nextPos;
+		}
+	}
 
     public Tile ThereIsTile(Vector2 position)
     {
@@ -132,5 +200,10 @@ public class Hex : MonoBehaviour
         }
 
         return null;
+    }
+
+    void SetRestTile(Tile tile)
+    {
+	    restTile = tile;
     }
 }
