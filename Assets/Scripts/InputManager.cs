@@ -63,12 +63,25 @@ public class InputManager : Singleton<InputManager>
                 r = Mathf.RoundToInt(worldPos.y + 0.5f);
             }
             
-            LevelEditor.Instance().CreateHexagonTileAt(q, r);
-            if(LevelEditor.Instance().levelData.tileData.FirstOrDefault(x=>x.q == q && x.r == r) == null)
+            if (LevelEditor.Instance().paintMode == PaintMode.Tile)
             {
-                HexagonTileData newData = new HexagonTileData(q,r);
-                LevelEditor.Instance().levelData.tileData.Add(newData);
-                Debug.Log("Added new data!");
+                LevelEditor.Instance().CreateHexagonTileAt(q, r);
+                if(LevelEditor.Instance().levelData.tileData.FirstOrDefault(x=>x.q == q && x.r == r) == null)
+                {
+                    HexagonTileData newData = new HexagonTileData(q,r);
+                    LevelEditor.Instance().levelData.tileData.Add(newData);
+                }
+            }
+            else if (LevelEditor.Instance().paintMode == PaintMode.Hex)
+            {
+                if (LevelEditor.Instance().TryGetTile(q, r, out var tile))
+                {
+                    HexagonTileData data = LevelEditor.Instance().GetOrCreateData(q, r);
+                    data.hasHex = true;
+                    data.color = LevelEditor.Instance().selectedColor;
+                    data.direction = LevelEditor.Instance().selectedDirection;
+                    LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
+                }
             }
         }
 
@@ -89,7 +102,20 @@ public class InputManager : Singleton<InputManager>
             {
                 r = Mathf.RoundToInt(worldPos.y + 0.5f);
             }
-            LevelEditor.Instance().RemoveHexagonTileAt(q, r);
+            if (LevelEditor.Instance().paintMode == PaintMode.Tile)
+            {
+                LevelEditor.Instance().RemoveHexagonTileAt(q, r);
+            }
+            else if (LevelEditor.Instance().paintMode == PaintMode.Hex)
+            {
+                if (LevelEditor.Instance().TryGetTile(q, r, out var tile))
+                {
+                    HexagonTileData data = LevelEditor.Instance().GetOrCreateData(q, r);
+                    data.hasHex = false;
+                    data.direction = Direction.None;
+                    LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
+                }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.S))

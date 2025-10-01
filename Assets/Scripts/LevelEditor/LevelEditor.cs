@@ -13,6 +13,8 @@ public class LevelEditor : Singleton<LevelEditor>
     [SerializeField] public float hexagonSize = 1;
     [SerializeField] public int level = 1;
     [SerializeField] public PaintMode paintMode;
+    [SerializeField] public HexColor selectedColor = HexColor.Red;
+    [SerializeField] public Direction selectedDirection = Direction.None;
     public LevelData levelData;
     Dictionary<Vector2Int, HexagonTile> hexagonTiles = new();
 
@@ -22,7 +24,7 @@ public class LevelEditor : Singleton<LevelEditor>
         {HexColor.Blue, Color.blue},
         {HexColor.Purple, Color.magenta},
         {HexColor.Red, Color.red},
-        {HexColor.Pink, new Color(255,105,180)},
+        {HexColor.Orange, new Color(1f, 0.5f, 0f)},
         {HexColor.Yellow, Color.yellow},
         {HexColor.Green, Color.green}
     };
@@ -58,6 +60,7 @@ public class LevelEditor : Singleton<LevelEditor>
             foreach (HexagonTileData htd in levelData.tileData)
             {
                 CreateHexagonTileAt(htd.q, htd.r);
+                ApplyVisualsToTileAt(htd.q, htd.r);
             }
         }
     }
@@ -81,7 +84,10 @@ public class LevelEditor : Singleton<LevelEditor>
         newTile.name = $"{q} {r}";
         newTile.axialCoordinate = new Vector2Int(q, r);
         newTile.transform.parent = LevelParent.Instance().transform;
+        newTile.transform.parent = LevelParent.Instance().transform;
         hexagonTiles[key] = newTile;
+
+        ApplyVisualsToTileAt(q, r);
     }
 
     public void RemoveHexagonTileAt(int q, int r)
@@ -124,6 +130,14 @@ public class LevelEditor : Singleton<LevelEditor>
         {
             levelData = JsonUtility.FromJson<LevelData>(jsonFile.text);
             Debug.Log(jsonFile.text);
+            // Normalize legacy data: if no hex, ensure direction is None
+            foreach (var td in levelData.tileData)
+            {
+                if (!td.hasHex)
+                {
+                    td.direction = Direction.None;
+                }
+            }
             GenerateMap();
         }
         
@@ -140,6 +154,30 @@ public class LevelEditor : Singleton<LevelEditor>
         levelData = new LevelData(new List<HexagonTileData>());
     }
 
+    public bool TryGetTile(int q, int r, out HexagonTile tile)
+    {
+        return hexagonTiles.TryGetValue(new Vector2Int(q, r), out tile);
+    }
+
+    public HexagonTileData GetOrCreateData(int q, int r)
+    {
+        HexagonTileData data = levelData.tileData.FirstOrDefault(x => x.q == q && x.r == r);
+        if (data == null)
+        {
+            data = new HexagonTileData(q, r);
+            levelData.tileData.Add(data);
+        }
+        return data;
+    }
+
+    public void ApplyVisualsToTileAt(int q, int r)
+    {
+        if (!hexagonTiles.TryGetValue(new Vector2Int(q, r), out HexagonTile tile)) return;
+        HexagonTileData data = levelData.tileData.FirstOrDefault(x => x.q == q && x.r == r);
+        if (data == null) return;
+        Color mappedColor = colorDict.ContainsKey(data.color) ? colorDict[data.color] : Color.white;
+        tile.ApplyHexVisual(data.hasHex, data.color, data.direction, mappedColor);
+    }
 }
 
 public enum PaintMode
@@ -154,7 +192,7 @@ public enum HexColor
     Blue,
     Purple,
     Red,
-    Pink,
+    Orange,
     Yellow,
     Green
 }

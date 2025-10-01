@@ -197,6 +197,9 @@ MonoBehaviour:
   hexagonTilePrefab: {fileID: 7591324116416873110, guid: 35c67bd1b3920324fa5d88c15152b1c6, type: 3}
   hexagonSize: 1
   level: 1
+  paintMode: 0
+  selectedColor: 2
+  selectedDirection: 6
   levelData:
     tileData: []
 --- !u!4 &316091616
