@@ -1,4 +1,6 @@
 using UnityEngine;
+using DG.Tweening;
+using UnityEditor;
 
 public class Hex : MonoBehaviour
 {
@@ -65,5 +67,70 @@ public class Hex : MonoBehaviour
     public void PerformMovement()
     {
         Debug.Log($"I AM MOVING {restTile.q} {restTile.r}");
+        Vector2 posToGo = GetNextPosition(direction);
+        Tile tileToGo = ThereIsTile(posToGo);
+        if (tileToGo != null)
+        {
+            if(!tileToGo.HasHex()) transform.DOMove(posToGo, 0.25f).SetEase(Ease.Linear).OnComplete(PerformMovement);
+            else
+            {
+                ReturnToRestPos();
+            }
+        }
+        else
+        {
+            transform.DOMove(posToGo, 0.25f).SetEase(Ease.Linear).OnComplete(HexFinish);
+        }
+    }
+
+    void HexFinish()
+    {
+        Debug.Log("Exited the map!");
+        Destroy(gameObject);
+    }
+
+    void ReturnToRestPos()
+    {
+        transform.DOMove(restTile.transform.position, 0.5f).SetEase(Ease.Linear);
+    }
+
+    public Vector2 GetNextPosition(Direction dir)
+    {
+        float xoffset = Mathf.Sqrt(3) / 2;
+        float yoffset = 0.5f;
+        switch (dir)
+        {
+            case Direction.D: return new Vector2(transform.position.x, transform.position.y - 2*yoffset);
+            case Direction.DR: return new Vector2(transform.position.x + xoffset, transform.position.y - yoffset);
+            case Direction.UR: return new Vector2(transform.position.x + xoffset, transform.position.y + yoffset);
+            case Direction.U: return new Vector2(transform.position.x, transform.position.y + 2*yoffset);
+            case Direction.UL: return new Vector2(transform.position.x - xoffset, transform.position.y + yoffset);
+            case Direction.DL: return new Vector2(transform.position.x - xoffset, transform.position.y - yoffset);
+            default: return Vector2.zero;
+        }
+    }
+
+    public Tile ThereIsTile(Vector2 position)
+    {
+        int q = Mathf.RoundToInt(position.x * 2f / Mathf.Sqrt(3));
+
+        // Step 2: get r depending on q parity
+        int r;
+        if (q % 2 == 0)
+        {
+            r = Mathf.RoundToInt(position.y);
+        }
+        else
+        {
+            r = Mathf.RoundToInt(position.y + 0.5f);
+        }
+
+        Vector2Int key = new Vector2Int(q, r);
+        if (GameManager.tileDict.ContainsKey(key))
+        {
+            return GameManager.tileDict[key];
+        }
+
+        return null;
     }
 }
