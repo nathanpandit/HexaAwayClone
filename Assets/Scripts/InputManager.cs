@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -63,6 +64,12 @@ public class InputManager : Singleton<InputManager>
             }
             
             LevelEditor.Instance().CreateHexagonTileAt(q, r);
+            if(LevelEditor.Instance().levelData.tileData.FirstOrDefault(x=>x.q == q && x.r == r) == null)
+            {
+                HexagonTileData newData = new HexagonTileData(q,r);
+                LevelEditor.Instance().levelData.tileData.Add(newData);
+                Debug.Log("Added new data!");
+            }
         }
 
         if (Input.GetMouseButton(1))

@@ -47,7 +47,7 @@ public class LevelEditor : Singleton<LevelEditor>
                 for (int j = -mapSizeY; j <= mapSizeY; j++)
                 {
                     CreateHexagonTileAt(i, j);
-                    HexagonTileData newData = new HexagonTileData(i,j, false, Direction.None);
+                    HexagonTileData newData = new HexagonTileData(i,j);
                     levelData.tileData.Add(newData);
                 }
 
@@ -55,9 +55,7 @@ public class LevelEditor : Singleton<LevelEditor>
         }
         else
         {
-            List<HexagonTileData> tempData = new();
-            tempData = levelData.tileData;
-            foreach (HexagonTileData htd in tempData)
+            foreach (HexagonTileData htd in levelData.tileData)
             {
                 CreateHexagonTileAt(htd.q, htd.r);
             }
@@ -89,13 +87,13 @@ public class LevelEditor : Singleton<LevelEditor>
     public void RemoveHexagonTileAt(int q, int r)
     {
         Debug.Log($"{q}, {r}");
-        HexagonTileData dataToRemove = levelData.tileData.FirstOrDefault(x => x.q == q && x.r == r);
         Vector2Int key = new Vector2Int(q, r);
+        Debug.Log(levelData.tileData.FirstOrDefault(x => x.q == q && x.r == r));
         if (hexagonTiles.ContainsKey(key))
         {
+            levelData.tileData.Remove(levelData.tileData.FirstOrDefault(x => x.q == q && x.r == r));
             Destroy(hexagonTiles[key].gameObject);
             hexagonTiles.Remove(key);
-            if(dataToRemove != null) levelData.tileData.Remove(dataToRemove);
         }
     }
 
@@ -125,9 +123,8 @@ public class LevelEditor : Singleton<LevelEditor>
         else
         {
             levelData = JsonUtility.FromJson<LevelData>(jsonFile.text);
-            LevelData tempData = levelData;
+            Debug.Log(jsonFile.text);
             GenerateMap();
-            levelData = tempData;
         }
         
         Debug.Log($"Level {level} loaded!");
