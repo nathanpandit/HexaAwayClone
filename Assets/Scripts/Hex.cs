@@ -195,4 +195,9 @@ public class Hex : MonoBehaviour
     {
 	    restTile = tile;
     }
+
+    public void SelfDestruct()
+    {
+	    Destroy(gameObject);
+    }
 }

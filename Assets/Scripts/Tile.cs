@@ -10,4 +10,9 @@ public class Tile : MonoBehaviour
         Hex hex = GameManager.hexes.FirstOrDefault(h => h.restTile.q == q && h.restTile.r == r);
         return hex != null;
     }
+
+    public void SelfDestruct()
+    {
+        Destroy(gameObject);
+    }
 }

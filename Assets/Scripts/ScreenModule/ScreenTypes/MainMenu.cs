@@ -5,17 +5,23 @@ using UnityEngine.UI;
 public class MainMenu : BaseScreen
 {
 
-    [SerializeField] private Button startButton;
+    [SerializeField] private Button startButton, settingsButton;
     void Awake()
     {
         type = ScreenType.MainMenu;
         startButton.onClick.AddListener(OnStartButtonClick);
+        settingsButton.onClick.AddListener(OnSettingsButtonClick);
     }
 
     void OnStartButtonClick()
     {
         LevelManager.Instance().StartGame();
         gameObject.SetActive(false);
+    }
+
+    void OnSettingsButtonClick()
+    {
+        ScreenManager.Instance().ShowScreen(ScreenType.SettingsScreen);
     }
 
     void OnEnable()

@@ -30,5 +30,10 @@ public class InputHandler : Singleton<InputHandler>
                 hexToMove.PerformMovement();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ScreenManager.Instance().ShowScreen(ScreenType.PauseScreen);
+        }
     }
 }

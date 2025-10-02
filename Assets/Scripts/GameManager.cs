@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public static class GameManager
@@ -29,5 +30,24 @@ public static class GameManager
     {
         Debug.Log("Level Won!");
         // Advance level or handle win state here if needed
+    }
+
+    public static void ResetLevel()
+    {
+        var Hexes = HexParent.Instance().GetComponentsInChildren<Hex>();
+        var tiles = TileParent.Instance().GetComponentsInChildren<Tile>();
+
+        foreach (Hex hex in Hexes)
+        {
+            hex.SelfDestruct();
+        }
+
+        foreach (Tile tile in tiles)
+        {
+            tile.SelfDestruct();
+        }
+        
+        hexes.Clear();
+        tileDict.Clear();
     }
 }
