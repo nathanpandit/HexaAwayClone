@@ -74,6 +74,11 @@ public class Hex : MonoBehaviour
 		if (result.forwardSteps > 0)
 		{
 			isAnimating = true;
+			// If path is clear to exit, remove this hex from occupancy listing so it doesn't block others during movement
+			if (result.allClear)
+			{
+				GameManager.hexes.Remove(this);
+			}
 			transform.DOMove(result.targetPos, duration).SetEase(Ease.Linear).OnComplete(() =>
 			{
 				if (result.allClear)
@@ -113,22 +118,6 @@ public class Hex : MonoBehaviour
 			isAnimating = false;
 		});
 	}
-
-    public Vector2 GetNextPosition(Direction dir)
-    {
-        float xoffset = Mathf.Sqrt(3) / 2;
-        float yoffset = 0.5f;
-        switch (dir)
-        {
-            case Direction.D: return new Vector2(transform.position.x, transform.position.y - 2*yoffset);
-            case Direction.DR: return new Vector2(transform.position.x + xoffset, transform.position.y - yoffset);
-            case Direction.UR: return new Vector2(transform.position.x + xoffset, transform.position.y + yoffset);
-            case Direction.U: return new Vector2(transform.position.x, transform.position.y + 2*yoffset);
-            case Direction.UL: return new Vector2(transform.position.x - xoffset, transform.position.y + yoffset);
-            case Direction.DL: return new Vector2(transform.position.x - xoffset, transform.position.y - yoffset);
-            default: return Vector2.zero;
-        }
-    }
 
 	private Vector2 GetNextPositionFrom(Vector2 fromPos, Direction dir)
 	{

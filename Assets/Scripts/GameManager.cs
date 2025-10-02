@@ -24,4 +24,10 @@ public static class GameManager
     {
         LevelGenerator.Instance().GenerateLevel(level);
     }
+
+    public static void LevelWon()
+    {
+        Debug.Log("Level Won!");
+        // Advance level or handle win state here if needed
+    }
 }
