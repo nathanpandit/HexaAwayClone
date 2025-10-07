@@ -69,6 +69,8 @@ public class Hex : MonoBehaviour
     {
 		if (isAnimating) return;
 		Debug.Log($"I AM MOVING {restTile.q} {restTile.r}");
+		GameManager.numberOfMoves--;
+		LevelManager.Instance().HandleMoveText();
 		var result = PathTest();
 		float duration = result.forwardSteps * GameManager.unitDuration;
 		if (result.forwardSteps > 0)

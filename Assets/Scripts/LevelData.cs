@@ -6,7 +6,7 @@ using UnityEngine;
 public class LevelData
 {
     public List<HexagonTileData> tileData;
-
+    public int numberOfMoves;
     public LevelData(List<HexagonTileData> _tileData)
     {
         tileData = _tileData;

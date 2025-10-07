@@ -27,6 +27,9 @@ public class LevelGenerator : Singleton<LevelGenerator>
                     CreateHex(hdt, tile);
                 }
             }
+
+            GameManager.numberOfMoves = currentLevelData.numberOfMoves;
+            LevelManager.Instance().HandleMoveText();
         }
     }
 

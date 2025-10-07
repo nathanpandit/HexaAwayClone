@@ -1,7 +1,11 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class LevelManager : Singleton<LevelManager>
 {
+
+    [SerializeField] public TextMeshProUGUI moveText;
     void Start()
     {
         ScreenManager.Instance().ShowScreen(ScreenType.MainMenu);
@@ -12,6 +16,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         GameManager.StartLevel();
         HandleCameraSettings();
+        HandleMoveText();
     }
 
     void HandleCameraSettings()
@@ -102,5 +107,11 @@ public class LevelManager : Singleton<LevelManager>
             camPos.y = centerY;
             cam.transform.position = camPos;
         }
+    }
+
+    public void HandleMoveText()
+    {
+        moveText = ScreenManager.Instance().transform.parent.GetComponentInChildren<TextMeshProUGUI>();
+        moveText.text = GameManager.numberOfMoves.ToString();
     }
 }

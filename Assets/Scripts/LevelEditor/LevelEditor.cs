@@ -12,6 +12,7 @@ public class LevelEditor : Singleton<LevelEditor>
     [SerializeField] private HexagonTile hexagonTilePrefab;
     [SerializeField] public float hexagonSize = 1;
     [SerializeField] public int level = 1;
+    [SerializeField] public int numberOfMoves = 20;
     [SerializeField] public PaintMode paintMode;
     [SerializeField] public HexColor selectedColor = HexColor.Red;
     [SerializeField] public Direction selectedDirection = Direction.None;
@@ -105,6 +106,7 @@ public class LevelEditor : Singleton<LevelEditor>
 
     public void SaveLevel()
     {
+        levelData.numberOfMoves = numberOfMoves;
         string saveData = JsonUtility.ToJson(levelData);
         string filePath = Application.dataPath + $"/Resources/Levels/Level_{level}.json";
         System.IO.File.WriteAllText(filePath, saveData);
@@ -139,6 +141,7 @@ public class LevelEditor : Singleton<LevelEditor>
                 }
             }
             GenerateMap();
+            numberOfMoves = levelData.numberOfMoves;
         }
         
         Debug.Log($"Level {level} loaded!");
