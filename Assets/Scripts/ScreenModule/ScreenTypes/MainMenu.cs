@@ -15,6 +15,7 @@ public class MainMenu : BaseScreen
 
     void OnStartButtonClick()
     {
+        GameManager.ResumeGame();
         LevelManager.Instance().StartGame();
         gameObject.SetActive(false);
     }
@@ -27,5 +28,6 @@ public class MainMenu : BaseScreen
     void OnEnable()
     {
         startButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = $"Level {GameManager.level}";
+        GameManager.PauseGame();
     }
 }

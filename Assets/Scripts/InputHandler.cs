@@ -6,7 +6,7 @@ public class InputHandler : Singleton<InputHandler>
 {
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !GameManager.isPaused)
         {
             Vector3 mousePos = Input.mousePosition;
             
@@ -31,9 +31,10 @@ public class InputHandler : Singleton<InputHandler>
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !GameManager.isPaused)
         {
             ScreenManager.Instance().ShowScreen(ScreenType.PauseScreen);
+            GameManager.PauseGame();
         }
     }
 }

@@ -6,6 +6,7 @@ public static class GameManager
 {
     public static int level = 1;
     public static float unitDuration = 0.1f;
+    public static bool isPaused = true;
     public static Dictionary<Vector2Int, Tile> tileDict = new();
     public static List<Hex> hexes = new();
 
@@ -29,6 +30,9 @@ public static class GameManager
     public static void LevelWon()
     {
         Debug.Log("Level Won!");
+        ScreenManager.Instance().ShowScreen(ScreenType.WinScreen);
+        PauseGame();
+        ResetLevel();
         // Advance level or handle win state here if needed
     }
 
@@ -49,5 +53,15 @@ public static class GameManager
         
         hexes.Clear();
         tileDict.Clear();
+    }
+
+    public static void PauseGame()
+    {
+        isPaused = true;
+    }
+
+    public static void ResumeGame()
+    {
+        isPaused = false;
     }
 }

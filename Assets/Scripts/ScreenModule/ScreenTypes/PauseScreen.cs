@@ -15,6 +15,7 @@ public class PauseScreen : BaseScreen
 
     void OnResumeButtonClicked()
     {
+        GameManager.ResumeGame();
         gameObject.SetActive(false);
     }
 
