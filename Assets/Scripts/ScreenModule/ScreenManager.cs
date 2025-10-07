@@ -3,11 +3,27 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class ScreenManager : Singleton<ScreenManager>
+public class ScreenManager : MonoBehaviour
 {
-    private static ScreenManager _instance;
     private BaseScreen[] screens;
     private RootScreen[] roots;
+    
+    private static ScreenManager _instance;
+
+    public static ScreenManager Instance()
+    {
+        if (_instance == null)
+        {
+            _instance = FindFirstObjectByType<ScreenManager>();
+            if (_instance == null)
+            {
+                GameObject obj = new GameObject(typeof(ScreenManager).Name);
+                _instance = obj.AddComponent<ScreenManager>();
+            }
+        }
+        return _instance;
+    }
+
 
     void Awake()
     {
@@ -18,7 +34,7 @@ public class ScreenManager : Singleton<ScreenManager>
     void Start()
     {
         HideAllScreens();
-        ShowScreen(ScreenType.MainMenu);
+        if(GameManager.level > 1) LevelManager.Instance().StartGame();
     }
 
     public void ShowScreen(ScreenType screenType)

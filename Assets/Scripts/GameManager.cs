@@ -24,12 +24,13 @@ public static class GameManager
 
     public static void StartLevel()
     {
+        ResumeGame();
         LevelGenerator.Instance().GenerateLevel(level);
     }
 
     public static void LevelWon()
     {
-        Debug.Log("Level Won!");
+        level++;
         ScreenManager.Instance().ShowScreen(ScreenType.WinScreen);
         PauseGame();
         ResetLevel();

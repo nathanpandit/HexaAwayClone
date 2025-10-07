@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
-
-    public Singleton() {}
-
+public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+{
     private static T _instance;
 
     public static T Instance()
@@ -20,9 +18,16 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
         return _instance;
     }
 
-    public void Awake()
+    protected virtual void Awake()
     {
+        // If an instance already exists and it's not this one — destroy this object
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this as T;
         DontDestroyOnLoad(gameObject);
     }
-
 }

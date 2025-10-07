@@ -1,7 +1,23 @@
 using UnityEngine;
 
-public class HexParent : Singleton<HexParent>
+public class HexParent : MonoBehaviour
 {
+    
+    private static HexParent _instance;
+
+    public static HexParent Instance()
+    {
+        if (_instance == null)
+        {
+            _instance = FindFirstObjectByType<HexParent>();
+            if (_instance == null)
+            {
+                GameObject obj = new GameObject(typeof(HexParent).Name);
+                _instance = obj.AddComponent<HexParent>();
+            }
+        }
+        return _instance;
+    }
     void OnTransformChildrenChanged()
     {
         int hexChildren = 0;

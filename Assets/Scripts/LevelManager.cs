@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class LevelManager : Singleton<LevelManager>
 {
-    void Awake()
+    void Start()
     {
-        
+        ScreenManager.Instance().ShowScreen(ScreenType.MainMenu);
+        Debug.Log("Start of LevelManager is called");
     }
 
     public void StartGame()
