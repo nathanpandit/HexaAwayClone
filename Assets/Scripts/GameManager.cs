@@ -35,7 +35,13 @@ public static class GameManager
         ScreenManager.Instance().ShowScreen(ScreenType.WinScreen);
         PauseGame();
         ResetLevel();
-        // Advance level or handle win state here if needed
+    }
+
+    public static void LevelLost()
+    {
+        ScreenManager.Instance().ShowScreen(ScreenType.LoseScreen);
+        PauseGame();
+        ResetLevel();
     }
 
     public static void ResetLevel()
