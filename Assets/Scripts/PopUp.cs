@@ -4,8 +4,8 @@ using UnityEngine;
 public class PopUp : MonoBehaviour
 {
     [SerializeField] private float displayDuration = 4f;
-    [SerializeField] private float widthRatio = 0.8f; // 80% of screen width
-    [SerializeField] private float heightRatio = 0.45f; // 45% of screen height
+    [SerializeField] private float widthRatio = 1f; // 80% of screen width
+    [SerializeField] private float heightRatio = 1f; // 45% of screen height
     
     // Reference resolution where scale 1,1 gives the desired ratios
     // iPhone 12 resolution: 390x844 (points) or 1170x2532 (pixels)

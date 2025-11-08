@@ -1,5 +1,4 @@
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +13,7 @@ public class ScrollController : MonoBehaviour
             scrollRect = GetComponent<ScrollRect>();
         }
     }
-    
+
     public void ScrollByAmount(float amount)
     {
         scrollRect.verticalNormalizedPosition = Mathf.Clamp01(

@@ -186,7 +186,10 @@ public class LevelEditor : Singleton<LevelEditor>
 public enum PaintMode
 {
     Tile,
-    Hex
+    Hex,
+    Rest,
+    Swapper2,
+    Swapper3
 }
 
 public enum HexColor
