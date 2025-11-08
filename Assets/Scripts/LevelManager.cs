@@ -111,7 +111,16 @@ public class LevelManager : Singleton<LevelManager>
 
     public void HandleMoveText()
     {
-        moveText = ScreenManager.Instance().transform.parent.GetComponentInChildren<TextMeshProUGUI>();
-        moveText.text = GameManager.numberOfMoves.ToString();
+        moveText = ScreenManager.Instance().transform.parent.GetComponentInChildren<TextMeshProUGUI>(includeInactive: true);
+        if (GameManager.isPaused)
+        {
+            moveText.gameObject.SetActive(false);
+            return;
+        }
+        else
+        {
+            moveText.text = GameManager.numberOfMoves.ToString();
+            moveText.gameObject.SetActive(true);
+        }
     }
 }

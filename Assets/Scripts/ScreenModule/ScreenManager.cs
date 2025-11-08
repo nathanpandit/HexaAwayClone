@@ -35,7 +35,9 @@ public class ScreenManager : MonoBehaviour
     void Start()
     {
         HideAllScreens();
-        if(GameManager.level > 1) LevelManager.Instance().StartGame();
+        if(GameManager.level > 0) LevelManager.Instance().StartGame();
+        else if(GameManager.level == 0) ShowScreen(ScreenType.MainMenu);
+        // FIXs
     }
 
     public void ShowScreen(ScreenType screenType)

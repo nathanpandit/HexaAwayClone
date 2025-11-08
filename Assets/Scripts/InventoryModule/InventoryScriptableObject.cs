@@ -1,16 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryScriptableObject : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+[CreateAssetMenu(fileName = "InventoryScriptableObject", menuName = "ScriptableObjects/InventoryScriptableObject")]
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public class InventoryScriptableObjectScript : ScriptableObject
+{
+    public List<InventoryDataItem> inventoryDataItems = new();
+}
+
+[System.Serializable]
+public class InventoryDataItem
+{
+    public InventoryType itemType;
+    public int quantity;
 }

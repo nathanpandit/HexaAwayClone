@@ -113,7 +113,20 @@ public class Hex : MonoBehaviour
     void HexFinish()
     {
         Debug.Log("Exited the map!");
+        // Trigger hex finished event - inventory increment and other handlers will respond
+        // Use try-catch to ensure Destroy is always called even if event handler throws exception
+        try
+        {
+            EventManager.Instance()?.OnHexFinished();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Exception in HexFinished event handler: {e.Message}");
+        }
+        
+        // Always destroy the hex, regardless of event handler success
         Destroy(gameObject);
+        HexParent.Instance().CheckChildrenChange();
     }
 
 	void ReturnToRestPos(float duration)

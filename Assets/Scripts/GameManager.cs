@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
 public static class GameManager
 {
-    public static int level = 1;
+    public static int level = 0;
     public static float unitDuration = 0.1f;
     public static bool isPaused = true;
     public static Dictionary<Vector2Int, Tile> tileDict = new();
@@ -26,12 +27,17 @@ public static class GameManager
     public static void StartLevel()
     {
         ResumeGame();
-        LevelGenerator.Instance().GenerateLevel(level);
+        int levelToStart = level;
+        if (levelToStart == 0) levelToStart = 1;
+        LevelGenerator.Instance().GenerateLevel(levelToStart);
     }
 
     public static void LevelWon()
     {
-        level++;
+        if (level == 0) level = 2;
+        else level++;
+        // Trigger level won event - inventory increment and other handlers will respond
+        EventManager.Instance().OnLevelWon();
         ScreenManager.Instance().ShowScreen(ScreenType.WinScreen);
         PauseGame();
         ResetLevel();
@@ -39,6 +45,7 @@ public static class GameManager
 
     public static void LevelLost()
     {
+        if(level == 0) level = 1;
         ScreenManager.Instance().ShowScreen(ScreenType.LoseScreen);
         PauseGame();
         ResetLevel();
@@ -66,10 +73,13 @@ public static class GameManager
     public static void PauseGame()
     {
         isPaused = true;
+        LevelManager.Instance().HandleMoveText();
     }
 
     public static void ResumeGame()
     {
         isPaused = false;
+        LevelManager.Instance().HandleMoveText();
+
     }
 }

@@ -18,20 +18,13 @@ public class HexParent : MonoBehaviour
         }
         return _instance;
     }
-    void OnTransformChildrenChanged()
+    public void CheckChildrenChange()
     {
-        int hexChildren = 0;
-        int childCount = transform.childCount;
-        for (int i = 0; i < childCount; i++)
-        {
-            Transform child = transform.GetChild(i);
-            if (child.GetComponent<Hex>() != null)
-            {
-                hexChildren++;
-            }
-        }
-
-        if (hexChildren == 0)
+        // Check GameManager.hexes instead of child count because:
+        // 1. Hexes are removed from GameManager.hexes when they exit (before destruction)
+        // 2. Unity's Destroy() doesn't immediately remove objects from hierarchy
+        // 3. This provides a more reliable check for when all hexes have exited
+        if (GameManager.hexes.Count == 0)
         {
             GameManager.LevelWon();
         }
