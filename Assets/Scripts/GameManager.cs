@@ -11,6 +11,7 @@ public static class GameManager
     public static Dictionary<Vector2Int, Tile> tileDict = new();
     public static List<Hex> hexes = new();
     public static int numberOfMoves;
+    public static bool scrollFlag = false;
 
     public static Dictionary<HexColor, Color> colorDict = new()
     {
@@ -36,6 +37,7 @@ public static class GameManager
     {
         if (level == 0) level = 2;
         else level++;
+        scrollFlag = true;
         // Trigger level won event - inventory increment and other handlers will respond
         EventManager.Instance().OnLevelWon();
         ScreenManager.Instance().ShowScreen(ScreenType.WinScreen);
@@ -80,6 +82,5 @@ public static class GameManager
     {
         isPaused = false;
         LevelManager.Instance().HandleMoveText();
-
     }
 }

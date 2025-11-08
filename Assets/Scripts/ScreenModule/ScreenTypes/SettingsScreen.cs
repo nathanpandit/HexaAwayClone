@@ -11,6 +11,19 @@ public class SettingsScreen : BaseScreen
         backButton.onClick.AddListener(OnBackButtonClicked);
     }
 
+    void OnEnable()
+    {
+        GameManager.PauseGame();
+    }
+
+    void OnDisable()
+    {
+        if (ScreenManager.Instance().GetActiveBaseScreenCount() == 0)
+        {
+            GameManager.ResumeGame();
+        }
+    }
+
     void OnBackButtonClicked()
     {
         gameObject.SetActive(false);

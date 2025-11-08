@@ -77,6 +77,11 @@ public class ScreenManager : MonoBehaviour
         HideAllBaseScreens();
         HideAllRootScreens();
     }
+
+    public int GetActiveBaseScreenCount()
+    {
+        return GetComponentsInChildren<BaseScreen>(includeInactive: false).Length;
+    }
     
     
 }

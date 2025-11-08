@@ -27,11 +27,6 @@ public class MainMenu : BaseScreen
 
     void OnEnable()
     {
-        /*
-        if(GameManager.level == 0) startButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = $"Level 1";
-        else startButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = $"Level {GameManager.level}";
-        */
-
         GameManager.PauseGame();
     }
 }

@@ -15,3 +15,9 @@ MonoBehaviour:
   inventoryDataItems:
   - itemType: 0
     quantity: 0
+  - itemType: 1
+    quantity: 18
+  - itemType: 2
+    quantity: 0
+  - itemType: 3
+    quantity: 314

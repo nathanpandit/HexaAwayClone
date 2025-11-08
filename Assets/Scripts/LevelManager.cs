@@ -115,7 +115,6 @@ public class LevelManager : Singleton<LevelManager>
         if (GameManager.isPaused)
         {
             moveText.gameObject.SetActive(false);
-            return;
         }
         else
         {
