@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public static class GameManager
     public static bool isPaused = true;
     public static Dictionary<Vector2Int, Tile> tileDict = new();
     public static List<Hex> hexes = new();
+    public static List<Other> others = new();
     public static int numberOfMoves;
     public static bool scrollFlag = false;
 

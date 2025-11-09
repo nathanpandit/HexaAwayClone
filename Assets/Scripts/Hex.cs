@@ -85,6 +85,18 @@ public class Hex : MonoBehaviour
 				{
 					HexFinish();
 				}
+				else if (result.reachedRest)
+				{
+					// Reached a rest tile - update coordinates and restTile
+					if (result.restTile != null)
+					{
+						q = result.restTile.q;
+						r = result.restTile.r;
+						restTile = result.restTile;
+						Debug.Log($"Hex reached rest tile at ({q}, {r})");
+					}
+					isAnimating = false;
+				}
 				else
 				{
 					ReturnToRestPos(duration);
@@ -159,6 +171,8 @@ public class Hex : MonoBehaviour
 		public bool allClear;
 		public int forwardSteps;
 		public Vector2 targetPos;
+		public bool reachedRest;
+		public Tile restTile;
 	}
 
 	private PathTestResult PathTest()
@@ -173,12 +187,18 @@ public class Hex : MonoBehaviour
 			{
 				// Reached edge; path is clear to the edge, and we move one extra step off-map
 				Vector2 offMapPos = nextPos;
-				return new PathTestResult { allClear = true, forwardSteps = steps + 1, targetPos = offMapPos };
+				return new PathTestResult { allClear = true, forwardSteps = steps + 1, targetPos = offMapPos, reachedRest = false, restTile = null };
 			}
 			if (nextTile.HasHex())
 			{
 				// Blocked; stop before the blocker
-				return new PathTestResult { allClear = false, forwardSteps = steps, targetPos = currentPos };
+				return new PathTestResult { allClear = false, forwardSteps = steps, targetPos = currentPos, reachedRest = false, restTile = null };
+			}
+			// Check if this tile is a rest tile - if so, stop here
+			if (nextTile is Rest)
+			{
+				// Found a rest tile; stop movement here and update restTile
+				return new PathTestResult { allClear = false, forwardSteps = steps + 1, targetPos = nextPos, reachedRest = true, restTile = nextTile };
 			}
 			// Empty tile, advance
 			steps++;

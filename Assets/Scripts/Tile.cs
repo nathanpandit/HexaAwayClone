@@ -11,6 +11,12 @@ public class Tile : MonoBehaviour
         return hex != null;
     }
 
+    public bool HasOther()
+    {
+        Other other = GameManager.others.FirstOrDefault(o => o.q == q && o.r == r);
+        return other != null;
+    }
+
     public void SelfDestruct()
     {
         Destroy(gameObject);

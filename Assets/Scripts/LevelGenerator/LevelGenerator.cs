@@ -7,6 +7,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
     private int level;
     private LevelData currentLevelData;
     public Tile tilePrefab;
+    public Rest restPrefab;
     public Hex hexPrefab;
 
 
@@ -25,6 +26,16 @@ public class LevelGenerator : Singleton<LevelGenerator>
                 if (hdt.hasHex)
                 {
                     CreateHex(hdt, tile);
+                }
+
+                if (hdt.hasOther)
+                {
+                    switch (hdt.otherType)
+                    {
+                        case OtherType.Rest:
+                            CreateRest(hdt, tile);
+                            break; ;
+                    }
                 }
             }
 
@@ -50,6 +61,19 @@ public class LevelGenerator : Singleton<LevelGenerator>
         newHex.Initialize(tile, hdt.q, hdt.r, hdt.color, hdt.direction);
         GameManager.hexes.Add(newHex);
         newHex.transform.parent = HexParent.Instance().transform;
+    }
+    
+    void CreateRest(HexagonTileData hdt, Tile tile)
+    {
+        Rest newRest = Instantiate(restPrefab, AxialToWorld(hdt.q, hdt.r), Quaternion.identity);
+        newRest.q = hdt.q;
+        newRest.r = hdt.r;
+        Vector2Int key = new Vector2Int(hdt.q, hdt.r);
+        // Replace the regular tile with the rest tile in tileDict
+        GameManager.tileDict[key] = newRest;
+        newRest.transform.parent = TileParent.Instance().transform;
+        // Destroy the old tile since we're replacing it with the rest
+        Destroy(tile.gameObject);
     }
 
     Vector2 AxialToWorld(int q, int r)

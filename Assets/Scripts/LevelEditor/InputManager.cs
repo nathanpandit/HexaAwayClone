@@ -78,10 +78,13 @@ public class InputManager : Singleton<InputManager>
                 if (LevelEditor.Instance().TryGetTile(q, r, out var tile))
                 {
                     HexagonTileData data = LevelEditor.Instance().GetOrCreateData(q, r);
-                    data.hasHex = true;
-                    data.color = LevelEditor.Instance().selectedColor;
-                    data.direction = LevelEditor.Instance().selectedDirection;
-                    LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
+                    if (!data.hasOther)
+                    {
+                        data.hasHex = true;
+                        data.color = LevelEditor.Instance().selectedColor;
+                        data.direction = LevelEditor.Instance().selectedDirection;
+                        LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
+                    }
                 }
             }
             else if (LevelEditor.Instance().paintMode == PaintMode.Rest)
@@ -89,12 +92,15 @@ public class InputManager : Singleton<InputManager>
                 if (LevelEditor.Instance().TryGetTile(q, r, out var tile))
                 {
                     HexagonTileData data = LevelEditor.Instance().GetOrCreateData(q, r);
-                    data.hasHex = false;
-                    data.hasOther = true;
-                    data.otherType = OtherType.Rest;
-                    data.color = HexColor.Black;
-                    data.direction = Direction.None;
-                    LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
+                    if (!data.hasHex)
+                    {
+                        data.hasHex = false;
+                        data.hasOther = true;
+                        data.otherType = OtherType.Rest;
+                        data.color = HexColor.Black;
+                        data.direction = Direction.None;
+                        LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
+                    }
                 }
             }
         }
