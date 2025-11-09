@@ -1,4 +1,5 @@
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -83,6 +84,19 @@ public class InputManager : Singleton<InputManager>
                     LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
                 }
             }
+            else if (LevelEditor.Instance().paintMode == PaintMode.Rest)
+            {
+                if (LevelEditor.Instance().TryGetTile(q, r, out var tile))
+                {
+                    HexagonTileData data = LevelEditor.Instance().GetOrCreateData(q, r);
+                    data.hasHex = false;
+                    data.hasOther = true;
+                    data.otherType = OtherType.Rest;
+                    data.color = HexColor.Black;
+                    data.direction = Direction.None;
+                    LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
+                }
+            }
         }
 
         if (Input.GetMouseButton(1))
@@ -113,6 +127,17 @@ public class InputManager : Singleton<InputManager>
                     HexagonTileData data = LevelEditor.Instance().GetOrCreateData(q, r);
                     data.hasHex = false;
                     data.direction = Direction.None;
+                    LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
+                }
+            }
+            else if (LevelEditor.Instance().paintMode == PaintMode.Rest)
+            {
+                if (LevelEditor.Instance().TryGetTile(q, r, out var tile))
+                {
+                    HexagonTileData data = LevelEditor.Instance().GetOrCreateData(q, r);
+                    data.hasOther = false;
+                    data.otherType = OtherType.None;
+                    data.color = HexColor.None;
                     LevelEditor.Instance().ApplyVisualsToTileAt(q, r);
                 }
             }

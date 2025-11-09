@@ -145,7 +145,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 247113436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fd6c3659fd1c48499e4b07dfe74f84a, type: 3}
+  m_Script: {fileID: 11500000, guid: 552a68fa2ba60164ba9e01bc15e0f35a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &247113438
@@ -192,16 +192,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7475e785b8b567942a8fe3853bed7a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSizeX: 3
-  mapSizeY: 3
+  mapSizeX: 2
+  mapSizeY: 2
   hexagonTilePrefab: {fileID: 3200131024215099976, guid: f62fd33541dea1e4caf0ba9d74564e1c, type: 3}
   hexagonSize: 1
-  level: 1
+  level: 4
+  numberOfMoves: 20
   paintMode: 0
   selectedColor: 2
   selectedDirection: 6
   levelData:
     tileData: []
+    numberOfMoves: 0
 --- !u!4 &316091616
 Transform:
   m_ObjectHideFlags: 0

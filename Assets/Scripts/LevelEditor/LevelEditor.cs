@@ -27,7 +27,8 @@ public class LevelEditor : Singleton<LevelEditor>
         {HexColor.Red, Color.red},
         {HexColor.Orange, new Color(1f, 0.5f, 0f)},
         {HexColor.Yellow, Color.yellow},
-        {HexColor.Green, Color.green}
+        {HexColor.Green, Color.green},
+        {HexColor.Black, Color.black}
     };
 
     private void Awake()
@@ -178,8 +179,26 @@ public class LevelEditor : Singleton<LevelEditor>
         if (!hexagonTiles.TryGetValue(new Vector2Int(q, r), out HexagonTile tile)) return;
         HexagonTileData data = levelData.tileData.FirstOrDefault(x => x.q == q && x.r == r);
         if (data == null) return;
-        Color mappedColor = colorDict.ContainsKey(data.color) ? colorDict[data.color] : Color.white;
-        tile.ApplyHexVisual(data.hasHex, data.color, data.direction, mappedColor);
+        
+        // Apply visuals based on paint mode type
+        if (data.hasHex)
+        {
+            // Apply hex visual for Tile and Hex paint modes
+            Color mappedColor = colorDict.ContainsKey(data.color) ? colorDict[data.color] : Color.white;
+            tile.ApplyHexVisual(data.hasHex, data.color, data.direction, mappedColor);
+        }
+        else if (data.hasOther)
+        {
+            // Apply other visual for Rest, Swapper2, Swapper3 paint modes
+            // For now, Rest type is represented with black color
+            Color mappedColor = colorDict.ContainsKey(data.color) ? colorDict[data.color] : Color.black;
+            tile.ApplyOtherVisual(data.hasOther, data.otherType, mappedColor);
+        }
+        else
+        {
+            // No hex or other - clear visuals
+            tile.ApplyHexVisual(false, HexColor.None, Direction.None, Color.white);
+        }
     }
 }
 
@@ -192,6 +211,14 @@ public enum PaintMode
     Swapper3
 }
 
+public enum OtherType
+{
+    Rest,
+    Swapper2,
+    Swapper3,
+    None
+}
+
 public enum HexColor
 {
     Cyan,
@@ -200,5 +227,7 @@ public enum HexColor
     Red,
     Orange,
     Yellow,
-    Green
+    Green,
+    Black,
+    None
 }

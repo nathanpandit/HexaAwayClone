@@ -117,4 +117,24 @@ public class HexagonTile : MonoBehaviour
             }
         }
     }
+
+    public void ApplyOtherVisual(bool hasOther, OtherType otherType, Color mappedColor)
+    {
+        if (hexRenderer != null)
+        {
+            hexRenderer.enabled = hasOther;
+            if (hasOther)
+            {
+                // For now, Rest type is represented with black color
+                Debug.Log($"Setting color to {mappedColor} for OtherType {otherType}");
+                hexRenderer.color = mappedColor;
+            }
+        }
+
+        // Disable arrow for other types
+        if (arrowRenderer != null)
+        {
+            arrowRenderer.enabled = false;
+        }
+    }
 }
